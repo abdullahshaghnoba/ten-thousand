@@ -10,7 +10,6 @@ class GameLogic:
    
     def roll_dice(num_dice):
         x= tuple(random.randint(1, 6) for _ in range(num_dice))
-        print(x)
         return x
 
     """
@@ -93,4 +92,13 @@ class GameLogic:
         if len(count_result)==2 and len(set(count_result.values()))==1 and list(set(count_result.values()))[0]==3:
             unbanked_points=unbanked_points*2           
                                                                                                                   
-        return unbanked_points    
+        return unbanked_points  
+
+    @staticmethod
+    def validate_keepers(roll, keepers):
+        remaining_dice = list(roll)
+        for keeper in keepers:
+            if keeper not in remaining_dice:
+                return False
+            remaining_dice.remove(keeper)
+        return True  
