@@ -138,8 +138,8 @@
 #             remaining_dice.remove(keeper)
 #         return True  
 ############################# my code modifid #####################################
-# from game_logic import GameLogic
-from ten_thousand.game_logic import GameLogic
+from game_logic import GameLogic
+# from ten_thousand.game_logic import GameLogic
 
 dice_roller = GameLogic.roll_dice
 
@@ -180,26 +180,24 @@ def start_game(max_round=40):
         unbanked_score = 0
         dice_kept = []
         while True:
-            choice=cheater_function()
+            choice=ask_for_input()
             if choice == "q":
                 break
 
             dice_kept = [int(x) for x in choice]
             
-            cheater=cheater_again(dice_roll,dice_kept,unpacked_tuple)
+            cheater=cheater_function(dice_roll,dice_kept,unpacked_tuple)
                     
-            cheater_repet=False
+            # cheater_repet=False
             while cheater:
-                choice=cheater_function()
+                choice=ask_for_input()
                 if choice == "q":
                     break
                 elif choice!="q":
                     dice_kept = [int(x) for x in choice]
-                    break
-                elif not cheater_repet:
-                        break
-                else:
-                    cheater_repet= cheater_again(dice_roll,dice_kept,unpacked_tuple)
+                    cheater= cheater_function(dice_roll,dice_kept,unpacked_tuple)
+                
+                
             if choice=="q":
                 break
             round_score = GameLogic.calculate_score(dice_kept)
@@ -244,12 +242,12 @@ def start_game(max_round=40):
 def decline_game():
     print("OK. Maybe another time")
 
-def cheater_function():
+def ask_for_input():
     print("Enter dice to keep, or (q)uit:")
     choice = input("> ")
     return choice
 
-def cheater_again(dice_roll,dice_kept,unpacked_tuple):
+def cheater_function(dice_roll,dice_kept,unpacked_tuple):
     cheater=False
     z=list(dice_roll)
     for x in dice_kept:
@@ -267,102 +265,3 @@ def cheater_again(dice_roll,dice_kept,unpacked_tuple):
 if __name__=="__main__":
     play()
 
-
-############################################################## trial and error code xd ######################################################
-# from ten_thousand.game_logic import GameLogic
-# # from game_logic import GameLogic
-
-# roll_dice = GameLogic.roll_dice
-# points_calculate = GameLogic.calculate_score
-
-# def play (roller = GameLogic.roll_dice):
-#     global roll_dice
-#     roll_dice = roller
-#     print("Welcome to Ten Thousand")
-#     print("(y)es to play or (n)o to decline")
-#     user_res= input('> ')
-#     if user_res == "n":
-#         quitter()
-#     if user_res == 'y':
-#         start_game()
-                
-# def quitter ():
-#         return print('OK. Maybe another time') 
-    
-
-# def start_game(round_num=1,total=0,number_dices = 6):
-        
-#         user_choice = ''
-        
-#         first_roll = roll_dice(number_dices)
-#         # zilch test
-#         if points_calculate(first_roll) == 0:
-#               print("ohhh ohhh ZILTCH you Lost your points.")
-#               round_num+=1
-#               points = 0
-#               return start_game(round_num,total,number_dices=6)
-
-#         unpacked_tuple = ''
-#         for i in first_roll:
-#             unpacked_tuple+= str(i)+' '
-#         print(f'Starting round {round_num}')
-#         print(f'Rolling {number_dices} dice...')
-#         print("*** "+unpacked_tuple.strip()+' ***') 
-#         print("Enter dice to keep, or (q)uit:")
-#         user_choice = input('> ')
-#         if user_choice == "q":
-#               end_game(total)
-#         else:
-#               dice_to_keep = tuple(int(x) for x in user_choice)
-#               roll_to_test_cheater = list(first_roll)
-#               for i in dice_to_keep:
-#                     if i not in roll_to_test_cheater:
-#                           print("""********************************************\n********************************************\n***************  DON'T CHEAT  **************\n********************************************\n********************************************\n                TRY AGAIN   """)
-#                         #   print("*** "+unpacked_tuple.strip()+' ***') 
-#                         #   print("Enter dice to keep, or (q)uit:")
-#                         #   user_choice = input('> ')
-#                         #   dice_to_keep = tuple(int(x) for x in user_choice)
-                          
-#                           return start_game(round_num,total,number_dices=6)
-                          
-#                     index = roll_to_test_cheater.index(i)
-#                     roll_to_test_cheater.pop(index)
-                          
-              
-#               number_dices = number_dices - len(dice_to_keep)
-#               points =  points_calculate(dice_to_keep)
-#               print(f"You have {points} unbanked points and {number_dices} dice remaining")
-#               print("(r)oll again, (b)ank your points or (q)uit:")     
-#               user_choice = input('> ')
-#               if user_choice == 'q':
-#                     end_game(total)
-#               elif user_choice == 'r':
-#                     if number_dices > 0 :
-#                         points += points
-#                         start_game(round_num,total,number_dices)
-#                     else:
-#                           print('you ran out of dices new round will start\n you didnt bank yor points so you lost them')
-#                           round_num+=1
-#                           start_game(round_num,total,number_dices=6)  
-#               elif user_choice == "b":
-#                     bank_points(points,round_num,total)
-                    
-                                    
-
-# def bank_points(points,round_num,total):
-#       total = total + points
-#       print(f"You banked {points} points in round {round_num}")
-#       print(f"Total score is {total} points")
-#       round_num += 1
-#       start_game(round_num,total)       
-        
-
-# def end_game(total):
-#       print(f"Thanks for playing. You earned {total} points")                   
-
-
-
-
-
-# if __name__ == "__main__":
-#     play()
