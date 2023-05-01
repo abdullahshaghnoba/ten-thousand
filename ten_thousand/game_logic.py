@@ -94,11 +94,40 @@ class GameLogic:
                                                                                                                   
         return unbanked_points  
 
+
     @staticmethod
-    def validate_keepers(roll, keepers):
-        remaining_dice = list(roll)
-        for keeper in keepers:
-            if keeper not in remaining_dice:
-                return False
-            remaining_dice.remove(keeper)
-        return True  
+    def validate_keepers(dice_roll,dice_kept):
+        cheater=True
+        z=list(dice_roll)
+        for x in dice_kept:
+            if x not in z:
+                cheater=False
+            else: 
+                z.remove(x)
+        return cheater 
+   
+    @staticmethod
+    def get_scorers(test_input):
+        main_score = GameLogic.calculate_score(test_input)
+        # print(main_score)
+        scorers = []
+        input_list = list(test_input)
+        # print(range(len(input_list)))
+        for i,val in enumerate(input_list):
+            input_list.pop(i)
+            element_score = GameLogic.calculate_score(tuple(input_list))
+            # print()
+            if element_score != main_score:
+                # print("x")
+                scorers.append(val)
+                input_list.insert(i,val)
+            else:
+                input_list.insert(i,val)   
+        scorers_tuple = tuple(scorers) 
+        # print(scorers_tuple)       
+        return scorers_tuple        
+
+
+
+if __name__=="__main__":
+    GameLogic.get_scorers((1,2,3,4,5))

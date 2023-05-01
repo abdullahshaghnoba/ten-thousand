@@ -138,8 +138,8 @@
 #             remaining_dice.remove(keeper)
 #         return True  
 ############################# my code modifid #####################################
-from game_logic import GameLogic
-# from ten_thousand.game_logic import GameLogic
+# from game_logic import GameLogic
+from ten_thousand.game_logic import GameLogic
 
 dice_roller = GameLogic.roll_dice
 
@@ -187,8 +187,12 @@ def start_game(max_round=40):
             dice_kept = [int(x) for x in choice]
             
             cheater=cheater_function(dice_roll,dice_kept,unpacked_tuple)
-                    
-            # cheater_repet=False
+            hot_check = GameLogic.get_scorers(dice_kept)
+
+            if len(hot_check) == 6 and not cheater:
+
+                choice = hot_dice_fun(dice_kept, unbanked_score)
+
             while cheater:
                 choice=ask_for_input()
                 if choice == "q":
@@ -202,10 +206,12 @@ def start_game(max_round=40):
                 break
             round_score = GameLogic.calculate_score(dice_kept)
             unbanked_score += round_score
-            print(f"You have {unbanked_score} unbanked points and {num_of_dice - len(dice_kept)} dice remaining")
+            if len(dice_kept)!=6:
+                num_of_dice-=len(dice_kept)
+                print(f"You have {unbanked_score} unbanked points and {num_of_dice} dice remaining")
 
-            print("(r)oll again, (b)ank your points or (q)uit:")
-            choice = input("> ")
+                print("(r)oll again, (b)ank your points or (q)uit:")
+                choice = input("> ")
             if choice == "b":
                 total_score += unbanked_score
                 print(f"You banked {unbanked_score} points in round {round_num}")
@@ -215,7 +221,7 @@ def start_game(max_round=40):
             elif choice == "q":
                 break
             elif choice == "r":
-                num_of_dice -= len(dice_kept)
+                # num_of_dice -= len(dice_kept)
                 if num_of_dice == 0:
                     break
                 dice_roll = dice_roller(num_of_dice)
@@ -227,7 +233,7 @@ def start_game(max_round=40):
 
                     unbanked_score = 0
                     print("****************************************")
-                    print("**         Zilch!!! Round over        **")        
+                    print("**        Zilch!!! Round over         **")        
                     print("****************************************")
                     print(f"You banked 0 points in round {round_num}")
                     print("Total score is 0 points")
@@ -244,15 +250,16 @@ def decline_game():
 
 def ask_for_input():
     print("Enter dice to keep, or (q)uit:")
-    choice = input("> ")
-    return choice
+    choice = input("> ")    
+    x = choice.replace(" ","")
+    return x
 
 def cheater_function(dice_roll,dice_kept,unpacked_tuple):
     cheater=False
     z=list(dice_roll)
     for x in dice_kept:
                 if x not in z:
-                    print("Cheater!!! Or Possibly made a typo...")
+                    print("Cheater!!! Or possibly made a typo...")
                     print("*** " + unpacked_tuple + " ***")
                     cheater=True
                     break
@@ -261,7 +268,15 @@ def cheater_function(dice_roll,dice_kept,unpacked_tuple):
     # quit_input=input("> ")
     return cheater                
 
+def hot_dice_fun(dice_kept, unbanked_score):
+    round_score = GameLogic.calculate_score(dice_kept)
+    unbanked_score += round_score
+    num_of_dice = 6
+    print(f"You have {unbanked_score} unbanked points and {num_of_dice} dice remaining")
 
+    print("(r)oll again, (b)ank your points or (q)uit:")
+    choice = input("> ")
+    return choice
 if __name__=="__main__":
     play()
 
